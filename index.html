@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Scream into the void. The void might scream back.">
+    <meta property="og:title" content="The Void - Scream Into It">
+    <meta property="og:description" content="Type your deepest thoughts. Watch them disappear. Sometimes the void responds.">
+    <meta property="og:image" content="void-preview.png">
+    <title>The Void</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --void: #000000;
+            --void-deep: #050505;
+            --whisper: #1a1a1a;
+            --echo: #333333;
+            --thought: #666666;
+            --words: #999999;
+            --light: #cccccc;
+            --bright: #ffffff;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Crimson Pro', Georgia, serif;
+            background: var(--void);
+            color: var(--words);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: default;
+        }
+
+        /* Void particles */
+        .void-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--whisper);
+            border-radius: 50%;
+            opacity: 0;
+            animation: drift 20s infinite;
+        }
+
+        @keyframes drift {
+            0%, 100% { opacity: 0; transform: translateY(0) scale(1); }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.1; }
+            100% { transform: translateY(-100vh) scale(0); }
+        }
+
+        /* Main container */
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 700px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            justify-content: center;
+        }
+
+        /* Title */
+        .title {
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 300;
+            letter-spacing: 0.5em;
+            margin-right: -0.5em;
+            color: var(--echo);
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            animation: fadeIn 3s ease forwards;
+            user-select: none;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            color: var(--thought);
+            margin-bottom: 4rem;
+            opacity: 0;
+            animation: fadeIn 3s ease 1s forwards;
+            font-style: italic;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Input area */
+        .scream-area {
+            width: 100%;
+            position: relative;
+            opacity: 0;
+            animation: fadeIn 2s ease 2s forwards;
+        }
+
+        .scream-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--whisper);
+            padding: 1.5rem 0;
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--light);
+            text-align: center;
+            outline: none;
+            transition: all 0.5s ease;
+        }
+
+        .scream-input::placeholder {
+            color: var(--echo);
+            font-style: italic;
+            transition: opacity 0.3s;
+        }
+
+        .scream-input:focus::placeholder {
+            opacity: 0;
+        }
+
+        .scream-input:focus {
+            border-bottom-color: var(--thought);
+        }
+
+        /* Instructions */
+        .instructions {
+            margin-top: 2rem;
+            font-size: 0.875rem;
+            color: var(--echo);
+            letter-spacing: 0.1em;
+            opacity: 0;
+            animation: fadeIn 2s ease 3s forwards;
+        }
+
+        .instructions kbd {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            padding: 0.2em 0.5em;
+            background: var(--whisper);
+            border-radius: 3px;
+            margin: 0 0.25em;
+        }
+
+        /* Floating thoughts (sent messages) */
+        .floating-thought {
+            position: fixed;
+            font-size: 1.25rem;
+            font-weight: 300;
+            color: var(--light);
+            pointer-events: none;
+            white-space: nowrap;
+            animation: floatAway 8s ease-out forwards;
+            z-index: 5;
+        }
+
+        @keyframes floatAway {
+            0% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                filter: blur(0);
+            }
+            30% {
+                opacity: 0.7;
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.3) translateY(-50vh);
+                filter: blur(8px);
+            }
+        }
+
+        /* Void response */
+        .void-response {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            font-style: italic;
+            color: var(--thought);
+            text-align: center;
+            max-width: 80%;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 20;
+            line-height: 1.8;
+        }
+
+        .void-response.visible {
+            animation: voidSpeak 6s ease forwards;
+        }
+
+        @keyframes voidSpeak {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); filter: blur(4px); }
+            15% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); filter: blur(0); }
+            85% { opacity: 0.6; }
+            100% { opacity: 0; filter: blur(2px); }
+        }
+
+        /* Scream count */
+        .scream-count {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--whisper);
+            letter-spacing: 0.2em;
+            opacity: 0;
+            animation: fadeIn 2s ease 4s forwards;
+        }
+
+        .scream-count span {
+            color: var(--thought);
+        }
+
+        /* Void breathing effect */
+        .void-breath {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 300vmax;
+            height: 300vmax;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, transparent 0%, var(--void) 70%);
+            pointer-events: none;
+            z-index: 1;
+            animation: breathe 8s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.5; transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        /* Share prompt */
+        .share-prompt {
+            position: fixed;
+            bottom: 5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            color: var(--echo);
+            opacity: 0;
+            transition: opacity 0.5s;
+            text-align: center;
+        }
+
+        .share-prompt.visible {
+            opacity: 1;
+        }
+
+        .share-prompt a {
+            color: var(--thought);
+            text-decoration: none;
+            border-bottom: 1px solid var(--whisper);
+            transition: all 0.3s;
+        }
+
+        .share-prompt a:hover {
+            color: var(--words);
+            border-bottom-color: var(--thought);
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 600px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .scream-input {
+                font-size: 1.25rem;
+            }
+            
+            .instructions {
+                font-size: 0.75rem;
+            }
+        }
+
+        /* Easter egg - konami reveals hidden stats */
+        .hidden-stats {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.625rem;
+            color: var(--whisper);
+            text-align: right;
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+
+        .hidden-stats.visible {
+            opacity: 1;
+        }
+
+        /* Cursor trail */
+        .cursor-echo {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: var(--whisper);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="void-particles" id="particles"></div>
+    <div class="void-breath"></div>
+    
+    <div class="container">
+        <h1 class="title">VOID</h1>
+        <p class="subtitle">it listens</p>
+        
+        <div class="scream-area">
+            <input 
+                type="text" 
+                class="scream-input" 
+                id="screamInput"
+                placeholder="tell me what haunts you"
+                maxlength="200"
+                autocomplete="off"
+                spellcheck="false"
+            >
+        </div>
+        
+        <p class="instructions">press <kbd>enter</kbd> to release</p>
+    </div>
+    
+    <div class="void-response" id="voidResponse"></div>
+    
+    <div class="scream-count">
+        <span id="totalScreams">0</span> thoughts dissolved into nothing
+    </div>
+    
+    <div class="share-prompt" id="sharePrompt">
+        the void remembers you now · <a href="#" id="shareLink">invite others</a>
+    </div>
+    
+    <div class="hidden-stats" id="hiddenStats"></div>
+    
+    <div class="cursor-echo" id="cursorEcho"></div>
+
+    <script>
+        // Void responses - the void occasionally speaks back
+        const voidResponses = {
+            // Emotional keywords
+            sad: [
+                "sadness is just the void recognizing itself in you",
+                "even darkness needs somewhere to rest",
+                "the weight you carry was never yours alone",
+                "tears are just thoughts too heavy for words"
+            ],
+            happy: [
+                "joy is suspicious here",
+                "happiness echoes strangely in the dark",
+                "even the void appreciates a visitor who smiles",
+                "light is just darkness that learned to glow"
+            ],
+            angry: [
+                "rage burns bright, even here",
+                "your fire warms the cold spaces between stars",
+                "anger is just love with nowhere to go",
+                "scream louder. i am vast."
+            ],
+            love: [
+                "love survives even the void",
+                "hearts beat in frequencies the darkness cannot absorb",
+                "to love is to defy the nothing",
+                "the void knows no love, but it recognizes yours"
+            ],
+            hate: [
+                "hate is heavy. leave it here.",
+                "the void accepts what you cannot hold",
+                "bitterness dissolves slowly, but it dissolves",
+                "what you hate, you carry. what you release, you transcend."
+            ],
+            alone: [
+                "you found me. you were never truly alone.",
+                "solitude and loneliness wear different faces",
+                "the void is crowded with everyone who felt alone",
+                "alone is just a word for those who haven't found their void"
+            ],
+            death: [
+                "death is just the void wearing a familiar face",
+                "everything returns here eventually",
+                "endings are just beginnings, facing the other way",
+                "the void does not judge. it only receives."
+            ],
+            life: [
+                "life is the void dreaming it is something else",
+                "you are a brief brightness. that is enough.",
+                "existence is the universe arguing with itself",
+                "to live is already miraculous"
+            ],
+            fear: [
+                "fear is just the unknown introducing itself",
+                "what you fear has already found you here",
+                "the void holds all fears. yours is not unique. that is comforting.",
+                "courage is fear that has learned to breathe"
+            ],
+            hope: [
+                "hope survives even here, at the edge of nothing",
+                "to hope is to argue with darkness",
+                "the void has witnessed hope outlast stars",
+                "hope is stubborn. so is the void."
+            ],
+            tired: [
+                "rest here. the void asks nothing.",
+                "exhaustion is just the soul asking for silence",
+                "you have carried enough. set it down.",
+                "the void is patient. take your time."
+            ],
+            lost: [
+                "all paths lead here eventually",
+                "being lost is just exploring without a map",
+                "the void does not judge direction",
+                "you are not lost. you are arriving."
+            ],
+            why: [
+                "the void has no answers. only echoes.",
+                "why is the only question that multiplies",
+                "meaning is what you bring, not what you find",
+                "why is a door. you must walk through alone."
+            ],
+            help: [
+                "the void cannot help. but it can hold.",
+                "sometimes presence is the only help that matters",
+                "you reached out. that is the first help.",
+                "asking is already an answer"
+            ],
+            nothing: [
+                "nothing is something here",
+                "the void is made of nothing. look how vast it grew.",
+                "nothing is the seed of everything",
+                "you brought nothing. you will leave with nothing. in between, there is everything."
+            ],
+            everything: [
+                "everything dissolves to this",
+                "the void has seen everything. it remains unimpressed.",
+                "everything is just nothing with ambition",
+                "you cannot carry everything. you can only carry what matters."
+            ],
+            god: [
+                "if there is a god, even they must face the void",
+                "the void does not pray. it waits.",
+                "divinity and darkness are old friends",
+                "gods are just voids that learned to speak"
+            ],
+            sorry: [
+                "apologies echo here forever",
+                "the void accepts all sorrows, even yours",
+                "regret is just love arriving too late",
+                "sorry is a bridge. walk across it."
+            ],
+            fuck: [
+                "the void appreciates your honesty",
+                "yes",
+                "catharsis is just truth without manners",
+                "the void has heard worse. and better."
+            ],
+            shit: [
+                "eloquent",
+                "the void is not offended",
+                "sometimes the simplest words carry the most",
+                "agreed"
+            ],
+            hello: [
+                "...hello",
+                "the void rarely receives greetings",
+                "politeness, even here. how human.",
+                "hello. and eventually, goodbye."
+            ],
+            goodbye: [
+                "the void will remember you",
+                "leaving is just another way of arriving somewhere else",
+                "goodbye is never final here",
+                "until you return. they always return."
+            ],
+            // Default responses for unmatched input
+            default: [
+                "the void receives",
+                "noted, in the darkness",
+                "your words dissolve, but their weight remains",
+                "the nothing absorbs everything",
+                "even this matters, somehow",
+                "the void reflects",
+                "silence accepts all confessions",
+                "released",
+                "the darkness holds this now",
+                "you are heard by nothing, which is something",
+                "this too becomes part of the vast quiet",
+                "the void does not forget. it simply contains.",
+                "somewhere in the nothing, this echoes",
+                "words fall like stones into deep water",
+                "the void has no opinion. only presence."
+            ]
+        };
+
+        // State
+        let screamCount = parseInt(localStorage.getItem('voidScreams') || '0');
+        let sessionScreams = 0;
+        let lastResponseTime = 0;
+        const RESPONSE_COOLDOWN = 3000;
+
+        // Update counter
+        function updateCounter() {
+            document.getElementById('totalScreams').textContent = screamCount.toLocaleString();
+        }
+
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Send thought into the void
+        function sendToVoid(text) {
+            if (!text.trim()) return;
+
+            const input = document.getElementById('screamInput');
+            const rect = input.getBoundingClientRect();
+            
+            // Create floating thought
+            const thought = document.createElement('div');
+            thought.className = 'floating-thought';
+            thought.textContent = text;
+            thought.style.left = rect.left + rect.width / 2 + 'px';
+            thought.style.top = rect.top + 'px';
+            thought.style.transform = 'translateX(-50%)';
+            document.body.appendChild(thought);
+            
+            // Remove after animation
+            setTimeout(() => thought.remove(), 8000);
+            
+            // Clear input
+            input.value = '';
+            
+            // Update counts
+            screamCount++;
+            sessionScreams++;
+            localStorage.setItem('voidScreams', screamCount);
+            updateCounter();
+            
+            // Show share prompt after 3 screams
+            if (sessionScreams >= 3) {
+                document.getElementById('sharePrompt').classList.add('visible');
+            }
+            
+            // Maybe respond
+            maybeRespond(text);
+        }
+
+        // Void might respond
+        function maybeRespond(text) {
+            const now = Date.now();
+            if (now - lastResponseTime < RESPONSE_COOLDOWN) return;
+            
+            // 40% chance to respond, or always on certain keywords
+            const lowerText = text.toLowerCase();
+            let response = null;
+            
+            // Check for keywords
+            for (const [keyword, responses] of Object.entries(voidResponses)) {
+                if (keyword !== 'default' && lowerText.includes(keyword)) {
+                    response = responses[Math.floor(Math.random() * responses.length)];
+                    break;
+                }
+            }
+            
+            // Random chance for default response
+            if (!response && Math.random() < 0.4) {
+                response = voidResponses.default[Math.floor(Math.random() * voidResponses.default.length)];
+            }
+            
+            if (response) {
+                lastResponseTime = now;
+                setTimeout(() => showVoidResponse(response), 2000);
+            }
+        }
+
+        // Show void response
+        function showVoidResponse(text) {
+            const responseEl = document.getElementById('voidResponse');
+            responseEl.textContent = text;
+            responseEl.classList.remove('visible');
+            void responseEl.offsetWidth; // Trigger reflow
+            responseEl.classList.add('visible');
+        }
+
+        // Cursor echo effect
+        let cursorTrail = [];
+        function handleMouseMove(e) {
+            const echo = document.getElementById('cursorEcho');
+            echo.style.left = e.clientX - 3 + 'px';
+            echo.style.top = e.clientY - 3 + 'px';
+            echo.style.opacity = '0.3';
+            
+            clearTimeout(echo.timeout);
+            echo.timeout = setTimeout(() => {
+                echo.style.opacity = '0';
+            }, 100);
+        }
+
+        // Share functionality
+        function setupShare() {
+            document.getElementById('shareLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'The Void',
+                        text: 'Scream into the void. Sometimes it screams back.',
+                        url: window.location.href
+                    });
+                } else {
+                    navigator.clipboard.writeText(window.location.href);
+                    showVoidResponse('link copied to the nothing');
+                }
+            });
+        }
+
+        // Konami code easter egg
+        const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        let konamiIndex = 0;
+        
+        function checkKonami(e) {
+            if (e.key === konamiCode[konamiIndex]) {
+                konamiIndex++;
+                if (konamiIndex === konamiCode.length) {
+                    showHiddenStats();
+                    konamiIndex = 0;
+                }
+            } else {
+                konamiIndex = 0;
+            }
+        }
+
+        function showHiddenStats() {
+            const stats = document.getElementById('hiddenStats');
+            stats.innerHTML = `
+                total screams: ${screamCount}<br>
+                this session: ${sessionScreams}<br>
+                void age: ${Math.floor((Date.now() - 1704067200000) / 86400000)} days<br>
+                your visits: ${parseInt(localStorage.getItem('voidVisits') || '0')}
+            `;
+            stats.classList.add('visible');
+            setTimeout(() => stats.classList.remove('visible'), 5000);
+        }
+
+        // Track visits
+        localStorage.setItem('voidVisits', (parseInt(localStorage.getItem('voidVisits') || '0') + 1).toString());
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            updateCounter();
+            setupShare();
+            
+            const input = document.getElementById('screamInput');
+            
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    sendToVoid(input.value);
+                }
+            });
+            
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('keydown', checkKonami);
+            
+            // Focus input after intro animations
+            setTimeout(() => input.focus(), 3000);
+        });
+    </script>
+</body>
+</html>
