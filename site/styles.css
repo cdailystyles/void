@@ -1,78 +1,37 @@
 /* ═══════════════════════════════════════════════════════════════
-   THE VOID - Styles
-   A mysterious, evolving experience
+   THE VOID - A Mysterious Experience
    ═══════════════════════════════════════════════════════════════ */
 
-/* CSS Custom Properties */
 :root {
-    /* Core colors */
     --void: #000000;
-    --void-deep: #030303;
-    --whisper: #0a0a0a;
-    --shadow: #111111;
+    --abyss: #020202;
+    --deep: #050505;
+    --shadow: #0a0a0a;
+    --whisper: #111111;
     --echo: #1a1a1a;
-    --murmur: #2a2a2a;
-    --thought: #444444;
-    --words: #666666;
-    --light: #888888;
-    --glow: #aaaaaa;
-    --bright: #cccccc;
+    --murmur: #252525;
+    --thought: #333333;
+    --words: #555555;
+    --light: #777777;
+    --glow: #999999;
+    --bright: #bbbbbb;
+    --flash: #ffffff;
 
-    /* Accent colors (used sparingly for mystery) */
-    --blood: #330000;
-    --deep-blue: #000033;
-    --ethereal: #1a1a2e;
+    /* Event colors */
+    --blood: #1a0000;
+    --blood-glow: #330000;
+    --signal: #001a1a;
+    --signal-glow: #003333;
+    --ritual: #0a000a;
+    --ritual-glow: #1a001a;
 
-    /* Animation timings */
-    --breathe-duration: 8s;
-    --float-duration: 12s;
-    --fade-duration: 0.5s;
-
-    /* The void's current mood (set by JS) */
-    --mood-hue: 0;
-    --mood-saturation: 0%;
-    --mood-intensity: 0;
-}
-
-/* Time-based moods (classes set by JS) */
-.mood-midnight {
-    --whisper: #0a0a12;
-    --echo: #12121a;
-    --mood-hue: 240;
-    --mood-saturation: 10%;
-}
-
-.mood-witching {
-    --whisper: #0a0508;
-    --echo: #150a10;
-    --mood-hue: 330;
-    --mood-saturation: 15%;
-}
-
-.mood-dawn {
-    --whisper: #0a0a08;
-    --echo: #14140f;
-    --mood-hue: 45;
-    --mood-saturation: 8%;
-}
-
-.mood-dusk {
-    --whisper: #08060a;
-    --echo: #0f0a14;
-    --mood-hue: 270;
-    --mood-saturation: 12%;
-}
-
-.mood-active {
-    --breathe-duration: 4s;
-}
-
-.mood-dormant {
-    --breathe-duration: 16s;
+    /* Timing */
+    --breathe: 8s;
+    --pulse: 4s;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Base Styles
+   Reset & Base
    ═══════════════════════════════════════════════════════════════ */
 
 * {
@@ -87,20 +46,76 @@ html, body {
 }
 
 body {
-    font-family: 'Crimson Pro', Georgia, 'Times New Roman', serif;
+    font-family: 'Crimson Pro', Georgia, serif;
     background: var(--void);
     color: var(--words);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     cursor: default;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 }
 
 ::selection {
     background: var(--echo);
-    color: var(--light);
+    color: var(--glow);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Background Layers
+   ═══════════════════════════════════════════════════════════════ */
+
+#layer-abyss,
+#layer-deep,
+#layer-surface {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+#layer-abyss {
+    z-index: 0;
+    background: var(--void);
+}
+
+#layer-deep {
+    z-index: 1;
+    background: radial-gradient(ellipse at center, var(--shadow) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 2s ease;
+}
+
+#layer-surface {
+    z-index: 2;
+    background: radial-gradient(circle at 50% 50%, var(--whisper) 0%, transparent 50%);
+    animation: layerPulse var(--breathe) ease-in-out infinite;
+}
+
+@keyframes layerPulse {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.1); }
+}
+
+/* Event: Blood Moon */
+body.event-blood #layer-deep {
+    background: radial-gradient(ellipse at center, var(--blood) 0%, transparent 70%);
+    opacity: 0.6;
+}
+
+body.event-blood #layer-surface {
+    background: radial-gradient(circle at 50% 50%, var(--blood-glow) 0%, transparent 50%);
+}
+
+/* Event: Signal */
+body.event-signal #layer-deep {
+    background: radial-gradient(ellipse at center, var(--signal) 0%, transparent 70%);
+    opacity: 0.5;
+}
+
+/* Event: Ritual */
+body.event-ritual #layer-deep {
+    background: radial-gradient(ellipse at center, var(--ritual) 0%, transparent 70%);
+    opacity: 0.7;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -114,7 +129,64 @@ body {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 0;
+    z-index: 5;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Glitch & Noise Effects
+   ═══════════════════════════════════════════════════════════════ */
+
+#glitch-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0;
+    mix-blend-mode: overlay;
+}
+
+#glitch-overlay.active {
+    animation: glitch 0.3s steps(2) forwards;
+}
+
+@keyframes glitch {
+    0% { opacity: 0; transform: translate(0); }
+    20% { opacity: 0.8; transform: translate(-2px, 1px); filter: hue-rotate(90deg); }
+    40% { opacity: 0.6; transform: translate(2px, -1px); filter: hue-rotate(180deg); }
+    60% { opacity: 0.8; transform: translate(-1px, 2px); filter: hue-rotate(270deg); }
+    80% { opacity: 0.4; transform: translate(1px, -2px); }
+    100% { opacity: 0; transform: translate(0); }
+}
+
+#signal-noise {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 99;
+    opacity: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(255,255,255,0.03) 2px,
+        rgba(255,255,255,0.03) 4px
+    );
+}
+
+body.event-signal #signal-noise {
+    opacity: 1;
+    animation: scanlines 8s linear infinite;
+}
+
+@keyframes scanlines {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(4px); }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -128,14 +200,13 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
+    min-height: 100vh;
     padding: 2rem;
-    max-width: 600px;
-    width: 100%;
+    text-align: center;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   The Breathing Core
+   The Core (Eye)
    ═══════════════════════════════════════════════════════════════ */
 
 #void-core {
@@ -146,72 +217,132 @@ body {
     width: 300px;
     height: 300px;
     border-radius: 50%;
-    background: radial-gradient(
-        circle at center,
-        var(--whisper) 0%,
-        var(--void) 70%
-    );
-    animation: breathe var(--breathe-duration) ease-in-out infinite;
+    background: radial-gradient(circle at center, var(--whisper) 0%, transparent 70%);
+    animation: breathe var(--breathe) ease-in-out infinite;
     pointer-events: none;
-    z-index: 1;
-    opacity: 0.6;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#void-eye {
+    width: 8px;
+    height: 8px;
+    background: var(--thought);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 1s ease, transform 0.3s ease;
+}
+
+body.void-watching #void-eye {
+    opacity: 1;
+}
+
+body.void-watching #void-core {
+    animation: breatheWatching 4s ease-in-out infinite;
 }
 
 @keyframes breathe {
-    0%, 100% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 0.4;
-    }
-    50% {
-        transform: translate(-50%, -50%) scale(1.15);
-        opacity: 0.7;
-    }
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.4; }
+    50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.6; }
+}
+
+@keyframes breatheWatching {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+    50% { transform: translate(-50%, -50%) scale(1.08); opacity: 0.8; }
+}
+
+/* Event states */
+body.event-blood #void-core {
+    background: radial-gradient(circle at center, var(--blood-glow) 0%, transparent 70%);
+}
+
+body.event-blood #void-eye {
+    background: #440000;
+    box-shadow: 0 0 20px #ff0000;
+}
+
+body.event-signal #void-core {
+    animation: breatheSignal 2s ease-in-out infinite;
+}
+
+@keyframes breatheSignal {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+    25% { transform: translate(-50%, -50%) scale(1.02); opacity: 0.7; }
+    50% { transform: translate(-50%, -50%) scale(0.98); opacity: 0.4; }
+    75% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.6; }
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Header / Title
+   Title
    ═══════════════════════════════════════════════════════════════ */
 
 #void-header {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     position: relative;
     z-index: 10;
 }
 
 #void-title {
-    font-size: clamp(3rem, 10vw, 5rem);
+    font-size: clamp(2.5rem, 12vw, 5rem);
     font-weight: 300;
     letter-spacing: 0.5em;
-    margin-right: -0.5em; /* Compensate for letter-spacing */
-    color: var(--light);
+    margin-right: -0.5em;
+    color: var(--glow);
     text-transform: uppercase;
-    position: relative;
-    animation: titlePulse 12s ease-in-out infinite;
 }
 
-@keyframes titlePulse {
-    0%, 100% { opacity: 0.7; }
-    50% { opacity: 1; }
+.flicker {
+    animation: flicker 4s ease-in-out infinite;
+}
+
+.flicker-delayed {
+    animation: flicker 4s ease-in-out infinite;
+    animation-delay: 2s;
+}
+
+@keyframes flicker {
+    0%, 100% { opacity: 1; }
+    92% { opacity: 1; }
+    93% { opacity: 0.4; }
+    94% { opacity: 1; }
+    96% { opacity: 0.6; }
+    97% { opacity: 1; }
 }
 
 #void-subtitle {
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 300;
     font-style: italic;
-    letter-spacing: 0.3em;
-    margin-right: -0.3em;
+    letter-spacing: 0.4em;
+    margin-right: -0.4em;
     color: var(--thought);
     margin-top: 0.5rem;
-    opacity: 0.8;
+}
+
+#void-status {
+    font-size: 0.75rem;
+    font-family: 'Special Elite', monospace;
+    letter-spacing: 0.2em;
+    color: var(--echo);
+    margin-top: 1rem;
+    min-height: 1.5em;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+#void-status.visible {
+    opacity: 1;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Input Area
+   Input
    ═══════════════════════════════════════════════════════════════ */
 
 #void-input-area {
     width: 100%;
-    max-width: 400px;
+    max-width: 450px;
     position: relative;
     z-index: 10;
 }
@@ -223,9 +354,8 @@ body {
     font-size: 1.1rem;
     font-style: italic;
     color: var(--bright);
-    background: transparent;
+    background: rgba(0, 0, 0, 0.5);
     border: 1px solid var(--echo);
-    border-radius: 0;
     outline: none;
     text-align: center;
     transition: all 0.4s ease;
@@ -234,90 +364,85 @@ body {
 #void-input::placeholder {
     color: var(--thought);
     font-style: italic;
-    transition: opacity 0.3s ease;
 }
 
 #void-input:focus {
     border-color: var(--murmur);
-    background: var(--void-deep);
-}
-
-#void-input:focus::placeholder {
-    opacity: 0.3;
+    background: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
 }
 
 #void-hint {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--thought);
-    margin-top: 1rem;
+    margin-top: 0.75rem;
     font-style: italic;
-    opacity: 0.6;
+    opacity: 0.5;
     transition: opacity 0.3s ease;
 }
 
 #void-input:focus + #void-hint {
-    opacity: 1;
+    opacity: 0.8;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Response Area
+   Response
    ═══════════════════════════════════════════════════════════════ */
 
 #void-response {
-    min-height: 80px;
+    min-height: 60px;
     margin-top: 2rem;
-    padding: 1rem;
     font-size: 1.1rem;
     font-style: italic;
     color: var(--light);
     opacity: 0;
     transition: opacity 0.8s ease;
-    max-width: 450px;
-    line-height: 1.6;
+    max-width: 500px;
+    line-height: 1.7;
 }
 
 #void-response.visible {
     opacity: 1;
 }
 
-#void-response.fading {
-    opacity: 0;
+#void-response.cipher {
+    font-family: 'Special Elite', monospace;
+    letter-spacing: 0.1em;
+    color: var(--glow);
+}
+
+#void-response.glitched {
+    animation: textGlitch 0.5s steps(2) infinite;
+}
+
+@keyframes textGlitch {
+    0% { transform: translate(0); }
+    25% { transform: translate(-1px, 1px); }
+    50% { transform: translate(1px, -1px); }
+    75% { transform: translate(-1px, -1px); }
+    100% { transform: translate(0); }
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Footer / Stats
+   Discovery Hint
    ═══════════════════════════════════════════════════════════════ */
 
-#void-footer {
+#discovery-hint {
     position: fixed;
-    bottom: 2rem;
-    left: 0;
-    right: 0;
-    text-align: center;
-    z-index: 10;
-}
-
-#void-counter {
-    font-size: 0.85rem;
-    color: var(--thought);
-    font-style: italic;
-    opacity: 0.7;
-}
-
-#thought-count {
-    color: var(--words);
-    font-style: normal;
-}
-
-#void-presence {
-    font-size: 0.75rem;
-    color: var(--thought);
-    margin-top: 0.5rem;
+    bottom: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.7rem;
+    font-family: 'Special Elite', monospace;
+    color: var(--echo);
+    letter-spacing: 0.3em;
     opacity: 0;
-    transition: opacity 0.5s ease;
+    transition: opacity 2s ease;
+    pointer-events: none;
+    z-index: 15;
 }
 
-#void-presence.visible {
+#discovery-hint.visible {
     opacity: 0.6;
 }
 
@@ -332,7 +457,7 @@ body {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 5;
+    z-index: 8;
     overflow: hidden;
 }
 
@@ -342,66 +467,179 @@ body {
     font-style: italic;
     color: var(--words);
     white-space: nowrap;
-    animation: floatAway 6s ease-out forwards;
-    pointer-events: none;
+    animation: floatAway 5s ease-out forwards;
 }
 
 @keyframes floatAway {
-    0% {
-        opacity: 0.8;
-        transform: translateY(0) scale(1);
-    }
-    30% {
-        opacity: 0.6;
-    }
-    100% {
-        opacity: 0;
-        transform: translateY(-200px) scale(0.5);
-    }
+    0% { opacity: 0.7; transform: translateY(0) scale(1) rotate(0deg); }
+    100% { opacity: 0; transform: translateY(-300px) scale(0.3) rotate(5deg); }
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Echo Container (Others' Thoughts)
+   Echo Container
    ═══════════════════════════════════════════════════════════════ */
 
 #echo-container {
     position: fixed;
-    bottom: 6rem;
+    bottom: 25%;
     left: 0;
     right: 0;
     text-align: center;
-    z-index: 8;
+    z-index: 9;
     pointer-events: none;
 }
 
 .echo {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-style: italic;
     color: var(--thought);
     opacity: 0;
-    animation: echoFade 8s ease-in-out forwards;
+    animation: echoFade 10s ease-in-out forwards;
     max-width: 80%;
     margin: 0 auto;
-    line-height: 1.5;
+    line-height: 1.6;
 }
 
 .echo-prefix {
     display: block;
-    font-size: 0.75rem;
-    color: var(--echo);
+    font-size: 0.65rem;
+    color: var(--whisper);
     margin-bottom: 0.3rem;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
 }
 
 @keyframes echoFade {
     0% { opacity: 0; transform: translateY(10px); }
-    15% { opacity: 0.5; transform: translateY(0); }
-    85% { opacity: 0.5; transform: translateY(0); }
+    10% { opacity: 0.5; transform: translateY(0); }
+    90% { opacity: 0.5; transform: translateY(0); }
     100% { opacity: 0; transform: translateY(-10px); }
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Hidden Layer (Easter Eggs)
+   Footer
+   ═══════════════════════════════════════════════════════════════ */
+
+#void-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem;
+    text-align: center;
+    z-index: 10;
+}
+
+#void-stats {
+    font-size: 0.75rem;
+    color: var(--thought);
+    font-style: italic;
+}
+
+#void-counter {
+    opacity: 0.6;
+}
+
+#thought-count {
+    color: var(--words);
+    font-style: normal;
+}
+
+#void-presence {
+    margin-left: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+#void-presence.visible {
+    opacity: 0.6;
+}
+
+#void-coordinates {
+    font-size: 0.6rem;
+    font-family: 'Special Elite', monospace;
+    color: var(--whisper);
+    margin-top: 0.5rem;
+    letter-spacing: 0.2em;
+    opacity: 0;
+    transition: opacity 1s ease;
+    cursor: pointer;
+}
+
+#void-coordinates.visible {
+    opacity: 0.4;
+}
+
+#void-coordinates:hover {
+    opacity: 0.8;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Hidden Sigil
+   ═══════════════════════════════════════════════════════════════ */
+
+#hidden-sigil {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    color: var(--whisper);
+    opacity: 0;
+    transition: opacity 2s ease;
+    cursor: pointer;
+    z-index: 50;
+}
+
+#hidden-sigil.revealed {
+    opacity: 0.3;
+}
+
+#hidden-sigil:hover {
+    opacity: 0.6;
+}
+
+#hidden-sigil svg {
+    width: 100%;
+    height: 100%;
+    animation: sigilRotate 60s linear infinite;
+}
+
+@keyframes sigilRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Hidden Portal
+   ═══════════════════════════════════════════════════════════════ */
+
+#hidden-portal {
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid transparent;
+    opacity: 0;
+    transition: all 1s ease;
+    z-index: 50;
+}
+
+#hidden-portal.revealed {
+    opacity: 1;
+    border-color: var(--echo);
+    cursor: pointer;
+}
+
+#hidden-portal.revealed:hover {
+    background: var(--whisper);
+    box-shadow: 0 0 20px var(--echo);
+    transform: scale(1.5);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Hidden Layer Overlay
    ═══════════════════════════════════════════════════════════════ */
 
 #hidden-layer {
@@ -410,11 +648,11 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 100;
+    background: var(--void);
+    z-index: 200;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--void);
     opacity: 0;
     pointer-events: none;
     transition: opacity 1s ease;
@@ -425,89 +663,183 @@ body {
     pointer-events: auto;
 }
 
-#hidden-layer.hidden {
-    display: none;
-}
-
-.hidden-content {
+#hidden-content {
     text-align: center;
+    max-width: 600px;
     padding: 2rem;
-    max-width: 500px;
 }
 
-.hidden-content h2 {
-    font-size: 2rem;
+#hidden-content h2 {
+    font-size: 1.5rem;
     font-weight: 300;
-    color: var(--light);
-    margin-bottom: 1rem;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.3em;
+    color: var(--glow);
+    margin-bottom: 1.5rem;
 }
 
-.hidden-content p {
+#hidden-content p {
     font-style: italic;
     color: var(--words);
     line-height: 1.8;
     margin-bottom: 1rem;
 }
 
-.hidden-close {
-    font-size: 0.8rem;
-    color: var(--thought);
-    margin-top: 2rem;
-    cursor: pointer;
-    opacity: 0.6;
-    transition: opacity 0.3s ease;
+#hidden-content .cipher-text {
+    font-family: 'Special Elite', monospace;
+    font-style: normal;
+    color: var(--light);
+    letter-spacing: 0.1em;
+    background: var(--abyss);
+    padding: 1rem;
+    margin: 1rem 0;
 }
 
-.hidden-close:hover {
+#hidden-content .close-hint {
+    font-size: 0.7rem;
+    color: var(--thought);
+    margin-top: 2rem;
+    opacity: 0.6;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Achievement
+   ═══════════════════════════════════════════════════════════════ */
+
+#achievement {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    background: var(--abyss);
+    border: 1px solid var(--echo);
+    padding: 1rem 2rem;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.5s ease;
+}
+
+#achievement.show {
+    transform: translateX(-50%) translateY(0);
+}
+
+#achievement-icon {
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--thought);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: var(--glow);
+}
+
+#achievement-text {
+    font-size: 0.8rem;
+    color: var(--light);
+    font-style: italic;
+    letter-spacing: 0.05em;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   The Watcher
+   ═══════════════════════════════════════════════════════════════ */
+
+#watcher {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 150;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 3s ease;
+}
+
+#watcher.visible {
     opacity: 1;
 }
 
+#watcher-eye {
+    width: 100px;
+    height: 100px;
+    border: 1px solid var(--thought);
+    border-radius: 50%;
+    position: relative;
+    animation: watcherPulse 2s ease-in-out infinite;
+}
+
+#watcher-eye::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    background: var(--thought);
+    border-radius: 50%;
+}
+
+#watcher-eye::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background: var(--void);
+    border-radius: 50%;
+}
+
+@keyframes watcherPulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+
 /* ═══════════════════════════════════════════════════════════════
-   Special States
+   Cipher Display
    ═══════════════════════════════════════════════════════════════ */
 
-/* Void is sleeping (late night dormant hours) */
-body.void-sleeping #void-title {
-    animation: titlePulse 20s ease-in-out infinite;
+#cipher-display {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    font-family: 'Special Elite', monospace;
+    font-size: 0.6rem;
+    color: var(--echo);
+    letter-spacing: 0.2em;
+    opacity: 0;
+    transition: opacity 1s ease;
+    z-index: 100;
 }
 
-body.void-sleeping #void-subtitle::after {
-    content: " ...it sleeps";
-}
-
-body.void-sleeping #void-core {
-    animation: breathe 20s ease-in-out infinite;
-    opacity: 0.3;
-}
-
-/* Void recognizes returning visitor */
-body.void-remembers #void-subtitle {
-    color: var(--words);
-}
-
-/* High activity state */
-body.void-active #void-core {
-    animation: breathe 4s ease-in-out infinite;
-    opacity: 0.8;
-}
-
-/* Konami unlocked state */
-body.konami-unlocked {
-    --whisper: #0a0a12;
-    --echo: #12121f;
-}
-
-body.konami-unlocked #void-core {
-    background: radial-gradient(
-        circle at center,
-        #0a0a1a 0%,
-        var(--void) 70%
-    );
+#cipher-display.visible {
+    opacity: 0.4;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Responsive Adjustments
+   Utility Classes
+   ═══════════════════════════════════════════════════════════════ */
+
+.hidden {
+    display: none !important;
+}
+
+.invisible {
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Responsive
    ═══════════════════════════════════════════════════════════════ */
 
 @media (max-width: 600px) {
@@ -525,47 +857,37 @@ body.konami-unlocked #void-core {
         padding: 0.8rem 1rem;
     }
 
-    #void-response {
-        font-size: 1rem;
-        padding: 0.5rem;
-    }
-
-    #void-footer {
-        bottom: 1rem;
-    }
-
     #void-core {
         width: 200px;
         height: 200px;
     }
+
+    #hidden-sigil {
+        width: 40px;
+        height: 40px;
+    }
+
+    #hidden-portal {
+        bottom: 30px;
+        right: 30px;
+        width: 15px;
+        height: 15px;
+    }
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Utility Classes
+   Print (hide everything)
    ═══════════════════════════════════════════════════════════════ */
 
-.hidden {
-    display: none !important;
-}
-
-.invisible {
-    opacity: 0 !important;
-    pointer-events: none !important;
-}
-
-.no-transition {
-    transition: none !important;
-}
-
-/* Screen reader only */
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+@media print {
+    body * {
+        display: none !important;
+    }
+    body::after {
+        content: 'the void cannot be captured';
+        display: block;
+        text-align: center;
+        padding: 2rem;
+        font-style: italic;
+    }
 }

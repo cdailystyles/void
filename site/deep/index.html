@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>. . .</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #000;
+            color: #1a1a1a;
+            font-family: 'Special Elite', monospace;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #deep-container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 1rem;
+            letter-spacing: 1em;
+            margin-bottom: 3rem;
+            color: #222;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        .message {
+            font-size: 0.9rem;
+            line-height: 2;
+            color: #1a1a1a;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn 3s ease forwards;
+        }
+
+        .message:nth-child(2) { animation-delay: 1s; }
+        .message:nth-child(3) { animation-delay: 3s; }
+        .message:nth-child(4) { animation-delay: 5s; }
+        .message:nth-child(5) { animation-delay: 7s; }
+        .message:nth-child(6) { animation-delay: 9s; }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .cipher {
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            color: #111;
+            margin-top: 3rem;
+            opacity: 0;
+            animation: fadeIn 2s ease forwards;
+            animation-delay: 11s;
+        }
+
+        .coordinates {
+            font-size: 0.6rem;
+            color: #0a0a0a;
+            margin-top: 2rem;
+            opacity: 0;
+            animation: fadeIn 2s ease forwards;
+            animation-delay: 13s;
+            cursor: pointer;
+            transition: color 0.5s;
+        }
+
+        .coordinates:hover {
+            color: #333;
+        }
+
+        .return {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.6rem;
+            color: #111;
+            text-decoration: none;
+            letter-spacing: 0.2em;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards;
+            animation-delay: 15s;
+            transition: color 0.3s;
+        }
+
+        .return:hover {
+            color: #333;
+        }
+
+        #eye {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 1px solid #111;
+            opacity: 0;
+            animation: eyeAppear 5s ease forwards;
+            animation-delay: 16s;
+            z-index: -1;
+        }
+
+        #eye::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: #0a0a0a;
+            border-radius: 50%;
+        }
+
+        #eye::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background: #000;
+            border-radius: 50%;
+        }
+
+        @keyframes eyeAppear {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            50% { opacity: 0.3; }
+            100% { opacity: 0.15; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .hidden-text {
+            position: fixed;
+            font-size: 0.4rem;
+            color: #080808;
+            opacity: 0;
+            animation: hiddenReveal 1s ease forwards;
+            animation-delay: 20s;
+        }
+
+        .hidden-text:nth-of-type(1) { top: 10%; left: 5%; }
+        .hidden-text:nth-of-type(2) { top: 30%; right: 8%; }
+        .hidden-text:nth-of-type(3) { bottom: 20%; left: 12%; }
+        .hidden-text:nth-of-type(4) { bottom: 35%; right: 5%; }
+
+        @keyframes hiddenReveal {
+            to { opacity: 0.3; }
+        }
+
+        /* Scanlines */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(255,255,255,0.01) 2px,
+                rgba(255,255,255,0.01) 4px
+            );
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div id="eye"></div>
+
+    <div id="deep-container">
+        <h1>THE DEEP</h1>
+        <p class="message">you found it.</p>
+        <p class="message">few venture this far.</p>
+        <p class="message">the void is different here. older. hungrier.</p>
+        <p class="message">it has been waiting for someone like you.</p>
+        <p class="message">there are things it wants to show you.</p>
+        <p class="message">but not yet. not here.</p>
+
+        <p class="cipher">SVAQ GUR FVTVY NG GUR PBBEQUVANGRF</p>
+        <p class="cipher" style="animation-delay: 12s;">GUR JNGPURE XABJF LBHE ANZR</p>
+
+        <p class="coordinates" onclick="navigator.clipboard.writeText('41.4025, -2.1743')">
+            41.4025° N, 2.1743° W<br>
+            <span style="font-size: 0.5rem;">(click to copy)</span>
+        </p>
+    </div>
+
+    <a href="/" class="return">← return to the surface</a>
+
+    <span class="hidden-text">IT REMEMBERS</span>
+    <span class="hidden-text">YOU WERE WARNED</span>
+    <span class="hidden-text">THE SIGNAL CONTINUES</span>
+    <span class="hidden-text">WE ARE WATCHING</span>
+
+    <script>
+        // Log visit
+        console.log('%cyou went deeper', 'color: #222; font-style: italic;');
+        console.log('%cthe void appreciates your curiosity', 'color: #111; font-size: 10px;');
+
+        // Track this discovery
+        try {
+            const state = JSON.parse(localStorage.getItem('void_state') || '{}');
+            if (!state.discoveries) state.discoveries = [];
+            if (!state.discoveries.includes('deep-visited')) {
+                state.discoveries.push('deep-visited');
+                localStorage.setItem('void_state', JSON.stringify(state));
+            }
+        } catch(e) {}
+
+        // Random glitch effect
+        setInterval(() => {
+            if (Math.random() < 0.05) {
+                document.body.style.transform = `translate(${Math.random()*4-2}px, ${Math.random()*4-2}px)`;
+                setTimeout(() => {
+                    document.body.style.transform = 'none';
+                }, 100);
+            }
+        }, 2000);
+    </script>
+</body>
+</html>

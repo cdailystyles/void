@@ -3,32 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="The void listens. The void remembers. Whisper your thoughts into the darkness.">
-    <meta property="og:title" content="The Void">
-    <meta property="og:description" content="Whisper into the darkness. Sometimes it whispers back.">
+    <meta name="description" content="The void listens. The void remembers. Something stirs in the darkness.">
+    <meta property="og:title" content="it listens">
+    <meta property="og:description" content="Something is waiting. Something is watching. Will you find it?">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://itlistens.com">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#000000">
-    <title>The Void</title>
+    <title>it listens</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&family=Special+Elite&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-layer="surface">
+    <!-- The deep background layers -->
+    <div id="layer-abyss"></div>
+    <div id="layer-deep"></div>
+    <div id="layer-surface"></div>
+
     <!-- Particle canvas -->
     <canvas id="void-canvas"></canvas>
+
+    <!-- Glitch overlay -->
+    <div id="glitch-overlay"></div>
+
+    <!-- Signal interference -->
+    <div id="signal-noise"></div>
 
     <!-- Main content -->
     <main id="void-container">
         <!-- The breathing core -->
-        <div id="void-core"></div>
+        <div id="void-core">
+            <div id="void-eye"></div>
+        </div>
 
         <!-- Title area -->
         <header id="void-header">
-            <h1 id="void-title">VOID</h1>
+            <h1 id="void-title"><span class="flicker">V</span>OI<span class="flicker-delayed">D</span></h1>
             <p id="void-subtitle">it listens</p>
+            <p id="void-status"></p>
         </header>
 
         <!-- Input area -->
@@ -39,6 +53,7 @@
                 placeholder="whisper into the void..."
                 autocomplete="off"
                 maxlength="200"
+                spellcheck="false"
             >
             <p id="void-hint">press enter to release</p>
         </div>
@@ -46,23 +61,57 @@
         <!-- Response area -->
         <div id="void-response"></div>
 
-        <!-- Stats area -->
-        <footer id="void-footer">
-            <p id="void-counter">
-                <span id="thought-count">0</span> thoughts dissolved into nothing
-            </p>
-            <p id="void-presence"></p>
-        </footer>
+        <!-- Discovery hint -->
+        <div id="discovery-hint"></div>
     </main>
 
     <!-- Floating thoughts container -->
     <div id="floating-thoughts"></div>
 
-    <!-- Hidden layers (revealed through discovery) -->
-    <div id="hidden-layer" class="hidden"></div>
-
     <!-- Echo container -->
     <div id="echo-container"></div>
+
+    <!-- Stats area (bottom) -->
+    <footer id="void-footer">
+        <div id="void-stats">
+            <span id="void-counter"><span id="thought-count">0</span> consumed</span>
+            <span id="void-presence"></span>
+        </div>
+        <div id="void-coordinates"></div>
+    </footer>
+
+    <!-- Hidden sigil (discoverable) -->
+    <div id="hidden-sigil" class="hidden" data-discovered="false">
+        <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="0.5"/>
+            <circle cx="50" cy="50" r="30" fill="none" stroke="currentColor" stroke-width="0.5"/>
+            <circle cx="50" cy="50" r="15" fill="none" stroke="currentColor" stroke-width="0.5"/>
+            <line x1="50" y1="5" x2="50" y2="95" stroke="currentColor" stroke-width="0.5"/>
+            <line x1="5" y1="50" x2="95" y2="50" stroke="currentColor" stroke-width="0.5"/>
+        </svg>
+    </div>
+
+    <!-- Hidden portal (leads to /deep) -->
+    <a id="hidden-portal" href="/deep" class="hidden"></a>
+
+    <!-- Hidden layer overlay -->
+    <div id="hidden-layer" class="hidden">
+        <div id="hidden-content"></div>
+    </div>
+
+    <!-- Achievement notification -->
+    <div id="achievement" class="hidden">
+        <div id="achievement-icon"></div>
+        <div id="achievement-text"></div>
+    </div>
+
+    <!-- The watcher (appears rarely) -->
+    <div id="watcher" class="hidden">
+        <div id="watcher-eye"></div>
+    </div>
+
+    <!-- Cipher display -->
+    <div id="cipher-display" class="hidden"></div>
 
     <script src="void.js"></script>
 </body>
