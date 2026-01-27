@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The void listens. The void remembers. Whisper your thoughts into the darkness.">
+    <meta property="og:title" content="The Void">
+    <meta property="og:description" content="Whisper into the darkness. Sometimes it whispers back.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://itlistens.com">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#000000">
+    <title>The Void</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Particle canvas -->
+    <canvas id="void-canvas"></canvas>
+
+    <!-- Main content -->
+    <main id="void-container">
+        <!-- The breathing core -->
+        <div id="void-core"></div>
+
+        <!-- Title area -->
+        <header id="void-header">
+            <h1 id="void-title">VOID</h1>
+            <p id="void-subtitle">it listens</p>
+        </header>
+
+        <!-- Input area -->
+        <div id="void-input-area">
+            <input
+                type="text"
+                id="void-input"
+                placeholder="whisper into the void..."
+                autocomplete="off"
+                maxlength="200"
+            >
+            <p id="void-hint">press enter to release</p>
+        </div>
+
+        <!-- Response area -->
+        <div id="void-response"></div>
+
+        <!-- Stats area -->
+        <footer id="void-footer">
+            <p id="void-counter">
+                <span id="thought-count">0</span> thoughts dissolved into nothing
+            </p>
+            <p id="void-presence"></p>
+        </footer>
+    </main>
+
+    <!-- Floating thoughts container -->
+    <div id="floating-thoughts"></div>
+
+    <!-- Hidden layers (revealed through discovery) -->
+    <div id="hidden-layer" class="hidden"></div>
+
+    <!-- Echo container -->
+    <div id="echo-container"></div>
+
+    <script src="void.js"></script>
+</body>
+</html>

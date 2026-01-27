@@ -1,0 +1,571 @@
+/* ═══════════════════════════════════════════════════════════════
+   THE VOID - Styles
+   A mysterious, evolving experience
+   ═══════════════════════════════════════════════════════════════ */
+
+/* CSS Custom Properties */
+:root {
+    /* Core colors */
+    --void: #000000;
+    --void-deep: #030303;
+    --whisper: #0a0a0a;
+    --shadow: #111111;
+    --echo: #1a1a1a;
+    --murmur: #2a2a2a;
+    --thought: #444444;
+    --words: #666666;
+    --light: #888888;
+    --glow: #aaaaaa;
+    --bright: #cccccc;
+
+    /* Accent colors (used sparingly for mystery) */
+    --blood: #330000;
+    --deep-blue: #000033;
+    --ethereal: #1a1a2e;
+
+    /* Animation timings */
+    --breathe-duration: 8s;
+    --float-duration: 12s;
+    --fade-duration: 0.5s;
+
+    /* The void's current mood (set by JS) */
+    --mood-hue: 0;
+    --mood-saturation: 0%;
+    --mood-intensity: 0;
+}
+
+/* Time-based moods (classes set by JS) */
+.mood-midnight {
+    --whisper: #0a0a12;
+    --echo: #12121a;
+    --mood-hue: 240;
+    --mood-saturation: 10%;
+}
+
+.mood-witching {
+    --whisper: #0a0508;
+    --echo: #150a10;
+    --mood-hue: 330;
+    --mood-saturation: 15%;
+}
+
+.mood-dawn {
+    --whisper: #0a0a08;
+    --echo: #14140f;
+    --mood-hue: 45;
+    --mood-saturation: 8%;
+}
+
+.mood-dusk {
+    --whisper: #08060a;
+    --echo: #0f0a14;
+    --mood-hue: 270;
+    --mood-saturation: 12%;
+}
+
+.mood-active {
+    --breathe-duration: 4s;
+}
+
+.mood-dormant {
+    --breathe-duration: 16s;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Base Styles
+   ═══════════════════════════════════════════════════════════════ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: 'Crimson Pro', Georgia, 'Times New Roman', serif;
+    background: var(--void);
+    color: var(--words);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+    background: var(--echo);
+    color: var(--light);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Canvas (Particles)
+   ═══════════════════════════════════════════════════════════════ */
+
+#void-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Main Container
+   ═══════════════════════════════════════════════════════════════ */
+
+#void-container {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    max-width: 600px;
+    width: 100%;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   The Breathing Core
+   ═══════════════════════════════════════════════════════════════ */
+
+#void-core {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle at center,
+        var(--whisper) 0%,
+        var(--void) 70%
+    );
+    animation: breathe var(--breathe-duration) ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.6;
+}
+
+@keyframes breathe {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.4;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.15);
+        opacity: 0.7;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Header / Title
+   ═══════════════════════════════════════════════════════════════ */
+
+#void-header {
+    margin-bottom: 3rem;
+    position: relative;
+    z-index: 10;
+}
+
+#void-title {
+    font-size: clamp(3rem, 10vw, 5rem);
+    font-weight: 300;
+    letter-spacing: 0.5em;
+    margin-right: -0.5em; /* Compensate for letter-spacing */
+    color: var(--light);
+    text-transform: uppercase;
+    position: relative;
+    animation: titlePulse 12s ease-in-out infinite;
+}
+
+@keyframes titlePulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+#void-subtitle {
+    font-size: 1.1rem;
+    font-weight: 300;
+    font-style: italic;
+    letter-spacing: 0.3em;
+    margin-right: -0.3em;
+    color: var(--thought);
+    margin-top: 0.5rem;
+    opacity: 0.8;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Input Area
+   ═══════════════════════════════════════════════════════════════ */
+
+#void-input-area {
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    z-index: 10;
+}
+
+#void-input {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    font-family: inherit;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--bright);
+    background: transparent;
+    border: 1px solid var(--echo);
+    border-radius: 0;
+    outline: none;
+    text-align: center;
+    transition: all 0.4s ease;
+}
+
+#void-input::placeholder {
+    color: var(--thought);
+    font-style: italic;
+    transition: opacity 0.3s ease;
+}
+
+#void-input:focus {
+    border-color: var(--murmur);
+    background: var(--void-deep);
+}
+
+#void-input:focus::placeholder {
+    opacity: 0.3;
+}
+
+#void-hint {
+    font-size: 0.8rem;
+    color: var(--thought);
+    margin-top: 1rem;
+    font-style: italic;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+#void-input:focus + #void-hint {
+    opacity: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Response Area
+   ═══════════════════════════════════════════════════════════════ */
+
+#void-response {
+    min-height: 80px;
+    margin-top: 2rem;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--light);
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    max-width: 450px;
+    line-height: 1.6;
+}
+
+#void-response.visible {
+    opacity: 1;
+}
+
+#void-response.fading {
+    opacity: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Footer / Stats
+   ═══════════════════════════════════════════════════════════════ */
+
+#void-footer {
+    position: fixed;
+    bottom: 2rem;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 10;
+}
+
+#void-counter {
+    font-size: 0.85rem;
+    color: var(--thought);
+    font-style: italic;
+    opacity: 0.7;
+}
+
+#thought-count {
+    color: var(--words);
+    font-style: normal;
+}
+
+#void-presence {
+    font-size: 0.75rem;
+    color: var(--thought);
+    margin-top: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+#void-presence.visible {
+    opacity: 0.6;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Floating Thoughts
+   ═══════════════════════════════════════════════════════════════ */
+
+#floating-thoughts {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+    overflow: hidden;
+}
+
+.floating-thought {
+    position: absolute;
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--words);
+    white-space: nowrap;
+    animation: floatAway 6s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes floatAway {
+    0% {
+        opacity: 0.8;
+        transform: translateY(0) scale(1);
+    }
+    30% {
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-200px) scale(0.5);
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Echo Container (Others' Thoughts)
+   ═══════════════════════════════════════════════════════════════ */
+
+#echo-container {
+    position: fixed;
+    bottom: 6rem;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 8;
+    pointer-events: none;
+}
+
+.echo {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: var(--thought);
+    opacity: 0;
+    animation: echoFade 8s ease-in-out forwards;
+    max-width: 80%;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+.echo-prefix {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--echo);
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.1em;
+}
+
+@keyframes echoFade {
+    0% { opacity: 0; transform: translateY(10px); }
+    15% { opacity: 0.5; transform: translateY(0); }
+    85% { opacity: 0.5; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-10px); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Hidden Layer (Easter Eggs)
+   ═══════════════════════════════════════════════════════════════ */
+
+#hidden-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--void);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s ease;
+}
+
+#hidden-layer.revealed {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#hidden-layer.hidden {
+    display: none;
+}
+
+.hidden-content {
+    text-align: center;
+    padding: 2rem;
+    max-width: 500px;
+}
+
+.hidden-content h2 {
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--light);
+    margin-bottom: 1rem;
+    letter-spacing: 0.2em;
+}
+
+.hidden-content p {
+    font-style: italic;
+    color: var(--words);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+
+.hidden-close {
+    font-size: 0.8rem;
+    color: var(--thought);
+    margin-top: 2rem;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+.hidden-close:hover {
+    opacity: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Special States
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Void is sleeping (late night dormant hours) */
+body.void-sleeping #void-title {
+    animation: titlePulse 20s ease-in-out infinite;
+}
+
+body.void-sleeping #void-subtitle::after {
+    content: " ...it sleeps";
+}
+
+body.void-sleeping #void-core {
+    animation: breathe 20s ease-in-out infinite;
+    opacity: 0.3;
+}
+
+/* Void recognizes returning visitor */
+body.void-remembers #void-subtitle {
+    color: var(--words);
+}
+
+/* High activity state */
+body.void-active #void-core {
+    animation: breathe 4s ease-in-out infinite;
+    opacity: 0.8;
+}
+
+/* Konami unlocked state */
+body.konami-unlocked {
+    --whisper: #0a0a12;
+    --echo: #12121f;
+}
+
+body.konami-unlocked #void-core {
+    background: radial-gradient(
+        circle at center,
+        #0a0a1a 0%,
+        var(--void) 70%
+    );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Responsive Adjustments
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 600px) {
+    #void-container {
+        padding: 1rem;
+    }
+
+    #void-title {
+        letter-spacing: 0.3em;
+        margin-right: -0.3em;
+    }
+
+    #void-input {
+        font-size: 1rem;
+        padding: 0.8rem 1rem;
+    }
+
+    #void-response {
+        font-size: 1rem;
+        padding: 0.5rem;
+    }
+
+    #void-footer {
+        bottom: 1rem;
+    }
+
+    #void-core {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Utility Classes
+   ═══════════════════════════════════════════════════════════════ */
+
+.hidden {
+    display: none !important;
+}
+
+.invisible {
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+.no-transition {
+    transition: none !important;
+}
+
+/* Screen reader only */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}

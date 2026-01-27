@@ -1,0 +1,16 @@
+# Cloudflare Worker Configuration
+# https://developers.cloudflare.com/workers/wrangler/configuration/
+
+name = "void-api"
+main = "index.js"
+compatibility_date = "2024-01-01"
+
+# KV Namespace binding - you'll need to update this ID after creating the namespace
+[[kv_namespaces]]
+binding = "VOID_KV"
+id = "YOUR_KV_NAMESPACE_ID_HERE"
+
+# Routes (optional - configure in dashboard instead if preferred)
+# routes = [
+#   { pattern = "itlistens.com/api/*", zone_name = "itlistens.com" }
+# ]
